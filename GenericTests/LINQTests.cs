@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.IO;
+using System.Threading;
 
 namespace GenericTests
 {
@@ -20,9 +21,33 @@ namespace GenericTests
         }
 
         [TestMethod]
+        public void MultiThread()
+        {
+            try
+            {
+                List<Task> taskList = new List<Task>();
+
+                for(int x = 0; x < 100; x++)
+                {
+                    taskList.Add(Callmelissa(x));
+                }
+
+                Task.WaitAll(taskList.ToArray());
+            }
+            catch (AggregateException ex)
+            {                throw;
+            }
+        }
+
+        private async Task  Callmelissa(int x)
+        {
+            await Task.Run(() => { ; });
+        }
+
+        [TestMethod]
         public void ListExclude()
         {
-            //act
+            //arrange
             var criticalChanges = new List<KeyValuePair<int, int>>()
             {
                 new KeyValuePair<int, int>(1, 1),
@@ -40,7 +65,7 @@ namespace GenericTests
                 new KeyValuePair<int, int>(5, 7)
             };
 
-            //arrange
+            //act
             var fieldChangesFiltered = fieldChanges.Except(criticalChanges);
             var critSimplified = criticalChanges.Select(item => item.Key);
             var fieldSimplified = fieldChangesFiltered.Select(item => item.Key);
@@ -338,6 +363,33 @@ namespace GenericTests
 
             //assert
             Assert.AreEqual(2, uniqueList.Count);
+        }
+
+        [TestMethod]
+        public void NullableContains()
+        {
+            //arrange
+            var ListOfNullableLongs = new List<long?>()
+            {
+                new long?(1),
+                null,
+                new long?(2)
+            };
+            var nullableIntToFind = new int?(1);
+            var nullableIntNotFound = new int?(3);
+            int basicIntToFind = 2;
+
+            //act
+            var actual1 = ListOfNullableLongs.Contains(nullableIntToFind);
+            var actual2 = ListOfNullableLongs.Contains(null);
+            var actual3 = ListOfNullableLongs.Contains(nullableIntNotFound);
+            var actual4 = ListOfNullableLongs.Contains(basicIntToFind);
+
+            //assert
+            Assert.IsTrue(actual1);
+            Assert.IsTrue(actual2);
+            Assert.IsFalse(actual3);
+            Assert.IsTrue(actual4);
         }
 
         private List<QuestionTypes> RandomizeQuestions(List<QuestionTypes> listUnderTest)

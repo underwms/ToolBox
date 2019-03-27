@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Text;
 
 namespace ToolBox
@@ -16,8 +17,10 @@ namespace ToolBox
             return !ReferenceEquals(null, obj);
         }
 
-        public static string ToJson<T>(T obj) =>
-            JsonConvert.SerializeObject(obj);
+        public static string ToJson<T>(T obj, bool format = false) =>
+            format
+                ? ToFormattedString(JsonConvert.SerializeObject(obj))
+                : JsonConvert.SerializeObject(obj);
 
         public static string ToFormattedString(string json)
         {
@@ -78,6 +81,33 @@ namespace ToolBox
             }
 
             return sb.ToString().Trim();
+        }
+
+        public static void SerializeJsonIntoStream(object value, Stream stream)
+        {
+            using (var sw = new StreamWriter(stream, new UTF8Encoding(false), 1024, true))
+            using (var jtw = new JsonTextWriter(sw) { Formatting = Formatting.None })
+            {
+                var js = new JsonSerializer();
+                js.Serialize(jtw, value);
+
+                jtw.Flush();
+            }
+        }
+
+        public static T DeserializeJsonFromStream<T>(Stream stream)
+        {
+            if (stream == null || stream.CanRead == false)
+            { return default(T); }
+            
+            using (var sr = new StreamReader(stream))
+            using (var jtr = new JsonTextReader(sr))
+            {
+                var js = new JsonSerializer();
+                var searchResult = js.Deserialize<T>(jtr);
+
+                return searchResult;
+            }
         }
     }
 }

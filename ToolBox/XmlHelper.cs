@@ -10,7 +10,7 @@ namespace ToolBox
         public override Encoding Encoding => Encoding.UTF8;
     }
 
-    public class XmlSerializer
+    public class XmlHelper
     {
         public static string ToXML<T>(T obj)
         {

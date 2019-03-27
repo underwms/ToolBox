@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ToolBox
 {
-    public class StringHash
+    public class StringHelper
     {
         private const int SaltSize = 16;
         private const int HashSize = 20;
@@ -19,7 +19,7 @@ namespace ToolBox
         public byte[] Salt => (byte[])_salt.Clone();
         public byte[] Hash => (byte[])_hash.Clone();
 
-        public StringHash(string password)
+        public StringHelper(string password)
         {
             if (string.IsNullOrEmpty(password)) return;
 
@@ -27,13 +27,13 @@ namespace ToolBox
             _hash = new Rfc2898DeriveBytes(password, _salt, HashIter).GetBytes(HashSize);
         }
 
-        public StringHash(byte[] hashBytes)
+        public StringHelper(byte[] hashBytes)
         {
             Array.Copy(hashBytes, 0, _salt = new byte[SaltSize], 0, SaltSize);
             Array.Copy(hashBytes, SaltSize, _hash = new byte[HashSize], 0, HashSize);
         }
 
-        public StringHash(byte[] salt, byte[] hash)
+        public StringHelper(byte[] salt, byte[] hash)
         {
             Array.Copy(salt, 0, _salt = new byte[SaltSize], 0, SaltSize);
             Array.Copy(hash, 0, _hash = new byte[HashSize], 0, HashSize);
@@ -59,6 +59,25 @@ namespace ToolBox
             }
 
             return true;
+        }
+
+        public string RandomString(int take)
+        {
+            var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+            var data = new byte[1];
+
+            using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
+            {
+                crypto.GetNonZeroBytes(data);
+                data = new byte[take];
+                crypto.GetNonZeroBytes(data);
+            }
+
+            var result = new StringBuilder(take);
+            foreach (byte b in data)
+            { result.Append(chars[b % (chars.Length)]); }
+
+            return result.ToString();
         }
     }
 }

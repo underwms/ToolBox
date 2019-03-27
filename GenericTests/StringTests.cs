@@ -4,12 +4,27 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace GenericTests
 {
     [TestClass]
     public class StringTests
     {
+
+        [TestMethod]
+        public void Contains()
+        {
+            //arrange
+            var fullName = "provider_C7430_FILE_FIELD";
+            var stringUnderTest = "7430_FILE_FIELD";
+
+            //act
+
+            //assert
+            Assert.IsTrue(fullName.Contains(stringUnderTest));
+        }
 
         [TestMethod]
         public void URLSplit()
@@ -63,6 +78,27 @@ namespace GenericTests
             var randomString = new string(chars.Select(c => chars[random.Next(chars.Length)]).Take(8).ToArray());
 
             Assert.IsTrue(!string.IsNullOrWhiteSpace(randomString));
+        }
+
+        [TestMethod]
+        public void RandomString2()
+        {
+            var take = 10;
+            var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".ToCharArray();
+            var data = new byte[1];
+
+            using (RNGCryptoServiceProvider crypto = new RNGCryptoServiceProvider())
+            {
+                crypto.GetNonZeroBytes(data);
+                data = new byte[take];
+                crypto.GetNonZeroBytes(data);
+            }
+
+            var result = new StringBuilder(take);
+            foreach (byte b in data)
+            { result.Append(chars[b % (chars.Length)]); }
+
+            Assert.IsTrue(!string.IsNullOrWhiteSpace(result.ToString()));
         }
 
         [TestMethod]
@@ -254,6 +290,23 @@ namespace GenericTests
             }
 
             Assert.AreEqual(10, listOfRandomStrings.Count);
+        }
+
+        [TestMethod]
+        public void SubStringOfDifferentLengths()
+        {
+            var s1 = "12345";
+            var s2 = "1234";
+            var s3 = "123456";
+
+            var ss1 = s1.Substring(0, 5);
+            //var ss2 = s2.Substring(0, 5);
+            var ss3 = s3.Substring(0, 5);
+
+            Assert.IsTrue(ss1.Length == 5);
+            //Assert.IsTrue(ss2.Length == 5);
+            Assert.IsTrue(ss3.Length == 5);
+            
         }
 
         private IEnumerable<string> ComplexSplit(string agentName)

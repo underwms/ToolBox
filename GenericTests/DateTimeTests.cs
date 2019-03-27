@@ -66,6 +66,38 @@ namespace GenericTests
 
 
         }
-    
+
+        [TestMethod]
+        public void FirstDayOfNextMonth()
+        {
+            var currentDate = new DateTime(2019, 03, 01); //System.DateTime.Now;
+            var nextMonth = currentDate.AddMonths(1);
+            var firstDayOfNextMonth = new DateTime(nextMonth.Year, nextMonth.Month, 1);
+
+            Assert.IsNotNull(firstDayOfNextMonth);
+        }
+
+        [TestMethod]
+        public void AddToMaxSubtractFromMin()
+        {
+            var max = DateTime.MaxValue;
+            var min = DateTime.MinValue;
+
+            //var add = max.AddDays(1);
+            //var sub = min.AddDays(-1);
+
+            //Assert.IsTrue(add == max);
+            //Assert.IsTrue(sub == min);
+        }
+
+        [TestMethod]
+        public void ShortDateTimeStringToObject()
+        {
+            var shortString = "2019-03-30";
+            var dateObject = DateTime.Parse(shortString);
+
+            Assert.IsTrue(dateObject.Hour == 0);
+        }
+
     }
 }
