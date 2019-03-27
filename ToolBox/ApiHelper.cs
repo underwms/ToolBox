@@ -21,29 +21,17 @@ namespace ToolBox
         private readonly HttpClient _httpClient;
 
         // Constructors ---------------------------------------------------------------------------
-        public ApiHelper()
-        {
-            _httpClient = new HttpClient(_credentials);
-            _httpClient.Timeout = _timeOut;
-        }
+        public ApiHelper() =>
+            _httpClient = new HttpClient(_credentials) { Timeout = _timeOut };
 
-        public ApiHelper(HttpClientHandler clientHandler)
-        {
-            _httpClient = new HttpClient(clientHandler);
-            _httpClient.Timeout = _timeOut;
-        }
+        public ApiHelper(HttpMessageHandler clientHandler) =>
+            _httpClient = new HttpClient(clientHandler) { Timeout = _timeOut };
+        
+        public ApiHelper(TimeSpan timeout) =>
+            _httpClient = new HttpClient(_credentials) { Timeout = timeout };
 
-        public ApiHelper(TimeSpan timeout)
-        {
-            _httpClient = new HttpClient(_credentials);
-            _httpClient.Timeout = timeout;
-        }
-
-        public ApiHelper(HttpClientHandler clientHandler, TimeSpan timeout)
-        {
-            _httpClient = new HttpClient(clientHandler);
-            _httpClient.Timeout = timeout;
-        }
+        public ApiHelper(HttpMessageHandler clientHandler, TimeSpan timeout) =>
+            _httpClient = new HttpClient(clientHandler) {Timeout = timeout};
 
         // Public methods -------------------------------------------------------------------------
         public async Task<T> GetAsync<T>(string url)

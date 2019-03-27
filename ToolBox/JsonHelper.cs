@@ -104,9 +104,9 @@ namespace ToolBox
             using (var jtr = new JsonTextReader(sr))
             {
                 var js = new JsonSerializer();
-                var searchResult = js.Deserialize<T>(jtr);
+                var retVal = js.Deserialize<T>(jtr);
 
-                return searchResult;
+                return retVal;
             }
         }
     }
