@@ -41,10 +41,10 @@ namespace ToolBox
             { return await HandleHttpResponse<T>(response); }
         }
 
-        public async Task<T> PostAsync<T>(string url, object dataPackage)
+        public async Task<T> PostAsync<T>(string url, object data)
         {
             using (var request = new HttpRequestMessage(HttpMethod.Post, url))
-            using (var httpContent = CreateJsonHttpContent(dataPackage))
+            using (var httpContent = CreateJsonHttpContent(data))
             {
                 request.Content = httpContent;
 
@@ -54,39 +54,6 @@ namespace ToolBox
         }
 
         // Private helper methods -----------------------------------------------------------------
-        private static async Task<T> HandleHttpResponse<T>(HttpResponseMessage response)
-        {
-            var stream = await response.Content.ReadAsStreamAsync();
-                
-            if (response.IsSuccessStatusCode)
-            { return JsonHelper.DeserializeJsonFromStream<T>(stream); }
-                
-            await ThrowApiException(response.StatusCode, stream);
-            return default(T);  //this is only to appease the syntax gods; this will never actually be hit
-        }
-
-        private static async Task ThrowApiException(HttpStatusCode responseStatusCode, Stream stream)
-        {
-            var content = await StreamToStringAsync(stream);
-            throw new ApiException
-            {
-                StatusCode = (int)responseStatusCode,
-                Content = content
-            };
-        }
-
-        private static async Task<string> StreamToStringAsync(Stream stream)
-        {
-            if (stream == null) 
-            { return null; }
-            
-            string content;
-            using (var sr = new StreamReader(stream))
-            { content = await sr.ReadToEndAsync(); }
-
-            return content;
-        }
-
         private static HttpContent CreateJsonHttpContent(object content)
         {
             if (content == null) 
@@ -101,6 +68,37 @@ namespace ToolBox
 
             return httpContent;
         }
+
+        private static async Task<T> HandleHttpResponse<T>(HttpResponseMessage response)
+        {
+            var stream = await response.Content.ReadAsStreamAsync();
+                
+            if (response.IsSuccessStatusCode)
+            { return JsonHelper.DeserializeJsonFromStream<T>(stream); }
+                
+            await ThrowApiException(response.StatusCode, stream);
+
+            return default(T);  //this is only to appease the syntax gods; this will never actually be returned
+        }
+        
+        private static async Task<string> StreamToStringAsync(Stream stream)
+        {
+            if (stream == null) 
+            { return null; }
+            
+            string content;
+            using (var sr = new StreamReader(stream))
+            { content = await sr.ReadToEndAsync(); }
+
+            return content;
+        }
+        
+        private static async Task ThrowApiException(HttpStatusCode responseStatusCode, Stream stream) =>
+            throw new ApiException
+            {
+                StatusCode = (int)responseStatusCode,
+                Content = await StreamToStringAsync(stream)
+            };
     }
 
     public class ApiException : Exception

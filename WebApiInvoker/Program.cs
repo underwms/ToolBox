@@ -49,8 +49,8 @@ namespace WebApiInvoker
                     }
                     case 2:
                     {
-                        var myobject = new SomeOtherClass() {Message = "Hello World"};
-                        var response = await apiHelper.PostAsync<SomeOtherClass>(url, myobject);
+                        var myObject = new SomeOtherClass() {Message = "Hello World"};
+                        var response = await apiHelper.PostAsync<SomeOtherClass>(url, myObject);
                             
                         if (response != null) 
                         { Console.WriteLine("response: " + response.Message); }

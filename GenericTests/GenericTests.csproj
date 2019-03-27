@@ -99,7 +99,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ApiTests.cs" />
     <Compile Include="Attributes\RequiredAttribute.cs" />
     <Compile Include="JSONTests.cs" />
     <Compile Include="Interfaces\IACIResponseEntity.cs" />
