@@ -37,7 +37,7 @@ namespace GenericTests
         {
             //act
             var responseXML =
-                "<add-billing-account-response xmlns=\"http://www.princetonecom.com/fundingPortal/addbillingaccountrequest\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
+                "<add-billing-account-response xmlns=\"\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">" +
                     "<message>" +
                         "<message-code>0</message-code>" +
                         "<message-text>STUB: Your request has been processed successfully.</message-text>" +

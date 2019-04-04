@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F860ACE8-BADB-434D-B718-1EA130287521}</ProjectGuid>
+    <ProjectGuid>{19806BAF-B18D-4016-9D61-02B2BE6CCCC0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ToolBox</RootNamespace>
-    <AssemblyName>ToolBox</AssemblyName>
+    <RootNamespace>ServiceModel</RootNamespace>
+    <AssemblyName>ServiceModel</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,13 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetZip, Version=1.11.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745, processorArchitecture=MSIL">
-      <HintPath>..\packages\DotNetZip.1.11.0\lib\net20\DotNetZip.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -46,29 +42,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiHelper.cs" />
-    <Compile Include="ArrayUtility.cs" />
-    <Compile Include="Attributes\NamingAttribute.cs" />
-    <Compile Include="ConversionUtility.cs" />
-    <Compile Include="EnumParser.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="IApiHelper.cs">
-      <DependentUpon>ApiHelper.cs</DependentUpon>
-    </Compile>
-    <Compile Include="JsonHelper.cs" />
-    <Compile Include="ReflectionUtility.cs" />
-    <Compile Include="StringHelper.cs" />
+    <Compile Include="DefaultModel.cs" />
+    <Compile Include="FileLoaderServiceModel.cs" />
+    <Compile Include="IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types\Argument.cs" />
-    <Compile Include="Types\ArgumentBindingAttribute.cs" />
-    <Compile Include="Types\KnownScopeName.cs" />
-    <Compile Include="TypeUtility.cs" />
-    <Compile Include="XmlHelper.cs" />
-    <Compile Include="ZipHelper.cs" />
+    <Compile Include="ResultStatus.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="ServiceEventArgs.cs" />
+    <Compile Include="ServiceEventHandler.cs" />
+    <Compile Include="ServiceEventType.cs" />
+    <Compile Include="ServiceModelBase.cs" />
+    <Compile Include="ServiceResult.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\ToolBox\ToolBox.csproj">
+      <Project>{f860ace8-badb-434d-b718-1ea130287521}</Project>
+      <Name>ToolBox</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

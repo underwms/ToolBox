@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Dapper;
 
 namespace DataRepository
 {
@@ -174,8 +173,8 @@ namespace DataRepository
             await SqlQueryWithParametersAsync<T>(sql, new Dictionary<string, object>{["XML"] = xml});
         
         // Private Methods ------------------------------------------------------------------------
-        private static string GetConnectString(string setting) =>
-            ConfigurationManager.ConnectionStrings[setting].ConnectionString;
+        private static string GetConnectString(string dbName) =>
+            ConfigurationManager.ConnectionStrings[dbName].ConnectionString;
         
         private static DynamicParameters BuildDynamicParameters(Dictionary<string, object> args)
         {
