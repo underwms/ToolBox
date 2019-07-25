@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -53,7 +54,17 @@ namespace GenericTests
             Assert.IsFalse(any);
         }
 
-            
+        [TestMethod]
+        public void ListIsNullAfterIntializing()
+        {
+            var actual = new List<ClassSub>();
+            actual = FunctionRetrunNull().ToList();
+
+            Assert.IsNull(actual);
+        }
+
+
+        public IEnumerable<ClassSub> FunctionRetrunNull() => null;
     }
 
     public class ClassMain
